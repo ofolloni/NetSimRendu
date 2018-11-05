@@ -15,16 +15,17 @@ void Network::resize(const size_t &n) {
 bool Network::add_link(const size_t& a, const size_t& b){
 	
 	if(a>=values.size() or b>=values.size() or a==b) { return false; } //if a or b do not exist or if they are the same
-		
+
 	for(auto i : links) {
 		if(i.first == a) {
 			if(i.second == b) {
 				return false; //if the link a - b already exists
 			}
-		}
-		if(i.first == b) {
-			if(i.second == a) {
-				return false; //if the link b - a already exists
+		} else {
+			if(i.first == b) {
+				if(i.second == a) {
+					return false; //if the link b - a already exists
+				}
 			}
 		}
 	}
@@ -39,16 +40,17 @@ size_t Network::random_connect(const double& mean_deg){
 	for(size_t i=0; i < values.size(); ++i) {
 		shuffled_values.push_back(i);
 	}
+	size_t count(0);
 	for(size_t i=0; i < values.size(); ++i) {
 		RNG.shuffle(shuffled_values);
 		int poissonNB(RNG.poisson(mean_deg));
 		if(poissonNB <= 0) { poissonNB = 0; }
 		if(poissonNB >= shuffled_values.size()) { poissonNB = shuffled_values.size() - 1; } //if the poisson distribution returns a number larger than the number of nodes, initiate it to the total number of nodes - 1, since we do not want count the current node i
-		for(int j=0; j <= poissonNB; ++j){
-			if(add_link(i, shuffled_values[i])) {}
+		for(int j=0; j < poissonNB; ++j){
+			if(add_link(i, shuffled_values[j])) { ++count; }
 		}
 	}
-	return links.size();
+	return count;
 }
 
 size_t Network::set_values(const std::vector<double>& new_vec){
