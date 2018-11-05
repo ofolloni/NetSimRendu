@@ -21,11 +21,10 @@ bool Network::add_link(const size_t& a, const size_t& b){
 			if(i.second == b) {
 				return false; //if the link a - b already exists
 			}
-		} else {
-			if(i.first == b) {
-				if(i.second == a) {
-					return false; //if the link b - a already exists
-				}
+		}
+		if(i.first == b) {
+			if(i.second == a) {
+				return false; //if the link b - a already exists
 			}
 		}
 	}
