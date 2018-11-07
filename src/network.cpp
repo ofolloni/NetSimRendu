@@ -17,16 +17,7 @@ bool Network::add_link(const size_t& a, const size_t& b){
 	if(a>=values.size() or b>=values.size() or a==b) { return false; } //if a or b do not exist or if they are the same
 
 	for(auto i : links) {
-		if(i.first == a) {
-			if(i.second == b) {
-				return false; //if the link a - b already exists
-			}
-		}
-		if(i.first == b) {
-			if(i.second == a) {
-				return false; //if the link b - a already exists
-			}
-		}
+		if((i.first == a and i.second == b) or ( i.first == b and i.second == a)){ return false; }//if the link a - b or b - a already exists	
 	}
 	links.insert({a, b});
 	links.insert({b, a});
